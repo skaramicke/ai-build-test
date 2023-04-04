@@ -20,7 +20,7 @@ jobs:
           path: ${{ env.CODE_PATH }}
 
       - name: Update code
-        uses: skaramicke/gpt-developer@a1
+        uses: skaramicke/gpt-developer@a2
         id: gpt
         with:
           openai_api_key: ${{ secrets.OPENAI_API_KEY }}
