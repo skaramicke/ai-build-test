@@ -14,11 +14,6 @@ jobs:
     name: Update the code according to issue text
     runs-on: ubuntu-latest
     steps:
-      - uses: ben-z/actions-comment-on-issue@1.0.2
-        with:
-          message: "I'm working on it! - GPT Developer"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -33,23 +28,9 @@ jobs:
           issue_text: "${{ github.event.issue.title}}, ${{ github.event.issue.body }}"
           path: ${{ env.CODE_PATH }}
 
-      - name: Add exit message to issue comments
-        if: steps.gpt.outputs.exit_message != ''
-        uses: ben-z/actions-comment-on-issue@1.0.2
-        with:
-          message: ${{ steps.gpt.outputs.exit_message }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Commit changes
         if: steps.gpt.outputs.commit_message != ''
         uses: EndBug/add-and-commit@v7
         with:
           commit_message: ${{ steps.gpt.outputs.commit_message }}
           add: ${{ env.CODE_PATH }}
-
-      - name: Add commit message to issue comments
-        if: steps.gpt.outputs.commit_message != ''
-        uses: ben-z/actions-comment-on-issue@1.0.2
-        with:
-          message: ${{ steps.gpt.outputs.commit_message }} - commit by GPT Developer
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
