@@ -5,9 +5,6 @@ on:
     types:
       - labeled
 
-env:
-  RELATIVE_CODE_PATH: "code"
-
 jobs:
   update-code-on-issue:
     if: github.event.label.name == 'to-do'
@@ -16,8 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          path: ${{ env.RELATIVE_CODE_PATH }}
 
       - name: Update code
         uses: skaramicke/gpt-developer@a2
@@ -26,10 +21,9 @@ jobs:
           openai_api_key: ${{ secrets.OPENAI_API_SECRET }}
           issue_number: ${{ github.event.issue.number }}
           issue_text: "${{ github.event.issue.title}}, ${{ github.event.issue.body }}"
-          path: ${{ github.workspace }}/${{ env.RELATIVE_CODE_PATH }}
+          path: ${{ github.workspace }}
 
       - name: Commit changes
-        uses: EndBug/add-and-commit@v7
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: ${{ steps.gpt.outputs.commit_message }} - gpt-developer
-          add: ${{ env.RELATIVE_CODE_PATH }}
